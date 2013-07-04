@@ -23,36 +23,6 @@ interface FlashMatrix {
 	ty: number;
 }
 
-interface FlashSymbolInstance {
-	accName: string;
-	actionScript: string;
-	backgroundColor: string;
-	bitmapRenderMode: string;
-	blendMode: string;
-	buttonTracking: string;
-	cacheAsBitmap: boolean;
-	colorAlphaAmount: number;
-	colorAlphaPercent: number;
-	colorBlueAmount: number;
-	colorBluePercent: number;
-	colorGreenAmount: number;
-	colorGreenPercent: number;
-	colorMode: string;
-	colorRedAmount: number;
-	colorRedPercent: number;
-	description: string;
-	filters: FlashFilter[];
-	firstFrame: number;
-	forceSimple: boolean;
-	loop: string;
-	shortcut: string;
-	silent: boolean;
-	symbolType: string;
-	tabIndex: number;
-	useBackgroundColor: boolean;
-	visible: boolean;
-}
-
 interface FlashFilter {
 	angle: number;
 	blurX: number;
@@ -500,7 +470,7 @@ interface FlashDocument {
 	//screenOutline: FlashScreenOutline;
 
 	/** An array of the selected objects in the document. */
-	selection: any[];
+	selection: FlashElement[];
 	
 	/** A Boolean value that specifies whether the object */
 	silent: boolean;
@@ -518,7 +488,21 @@ interface FlashDocument {
 	zoomFactor: number;
 }
 
-interface FlashTextAttrs {
+interface FlashText {
+	getTextAttr();
+	getTextString();
+	setTextAttr();
+	setTextString();
+	accName: string;
+	antiAliasSharpness: number;
+	antiAliasThickness: number;
+	autoExpand: boolean;
+	border: boolean;
+	description: string;
+	embeddedCharacters: string;
+}
+
+interface FlashTextAttrs extends FlashText {
 	aliasText: boolean;
 	alignment: string;
 	autoKern: boolean;
@@ -567,7 +551,87 @@ interface FlashInstance {
 	libraryItem?: FlashItem;
 }
 
-interface FlashElement extends FlashInstance {
+interface _FlashBitmap {
+	width; height; depth; bits; cTab?: string[];
+}
+
+// if FlashElement.elementType == 'instance'
+interface FlashBitmapInstance {
+	getBits(): _FlashBitmap;
+	setBits(bitmap: _FlashBitmap): void;
+	hPixels: number;
+	vPixels: number;
+
+}
+
+interface FlashCompiledClipInstance {
+	accName: string;
+	actionScript: string;
+	description: string;
+	forceSimple: boolean;
+	shortcut: string;
+	silent: boolean;
+	tabIndex: number;
+}
+
+interface FlashSymbolInstance {
+	accName: string;
+	actionScript: string;
+	backgroundColor: string;
+	bitmapRenderMode: string;
+	blendMode: string;
+	buttonTracking: string;
+	cacheAsBitmap: boolean;
+	colorAlphaAmount: number;
+	colorAlphaPercent: number;
+	colorBlueAmount: number;
+	colorBluePercent: number;
+	colorGreenAmount: number;
+	colorGreenPercent: number;
+	colorMode: string;
+	colorRedAmount: number;
+	colorRedPercent: number;
+	description: string;
+	filters: FlashFilter[];
+	firstFrame: number;
+	forceSimple: boolean;
+	loop: string;
+	shortcut: string;
+	silent: boolean;
+	symbolType: string;
+	tabIndex: number;
+	useBackgroundColor: boolean;
+	visible: boolean;
+}
+
+interface FlashComponentInstance {
+	parameters: any[];
+}
+
+/**
+ * The Shape object is a subclass of the Element object. The Shape object provides more precise control
+ * than the drawing APIs when manipulating or creating geometry on the Stage. This control is necessary
+ * so that scripts can create useful effects and other drawing commands (seeElement object).
+ * All Shape methods and properties that change a shape or any of its subordinate parts must be placed between
+ * shape.beginEdit() and shape.endEdit() calls to function correctly.
+ */
+interface FlashShape extends FlashOval {
+	getCubicSegmentPoints(cubicSegmentIndex: number): FlashPoint[];
+	beginEdit(): void;
+	deleteEdge(index: number): void;
+	endEdit(): void;
+	contours: FlashContour[];
+	edges: FlashEdge[];
+	isDrawingObject: boolean;
+	isGroup: boolean;
+	isOvalObject: boolean;
+	isRectangleObject: boolean;
+	members: FlashShape[];
+	numCubicSegments: number;
+	vertices: FlashVertex[];
+}
+
+interface FlashElement extends FlashInstance, FlashBitmapInstance, FlashCompiledClipInstance, FlashSymbolInstance, FlashComponentInstance, FlashShape {
 	getPersistentData(name: string): any;
 	getTransformationPoint(): FlashPoint;
 	hasPersistentData(name:string): boolean;
@@ -931,28 +995,6 @@ interface FlashVertex {
 	y: number;
 }
 
-/**
- * The Shape object is a subclass of the Element object. The Shape object provides more precise control
- * than the drawing APIs when manipulating or creating geometry on the Stage. This control is necessary
- * so that scripts can create useful effects and other drawing commands (seeElement object).
- * All Shape methods and properties that change a shape or any of its subordinate parts must be placed between
- * shape.beginEdit() and shape.endEdit() calls to function correctly.
- */
-interface FlashShape extends FlashOval {
-	getCubicSegmentPoints(cubicSegmentIndex:number): number;
-	beginEdit():void;
-	deleteEdge(index:number):void;
-	endEdit():void;
-	contours: FlashContour[];
-	edges: FlashEdge[];
-	isDrawingObject: boolean;
-	isGroup: boolean;
-	isOvalObject: boolean;
-	isRectangleObject: boolean;
-	members: FlashShape[];
-	numCubicSegments: number;
-	vertices: FlashVertex[];
-}
 
 interface FlashTimeline {
 	currentFrame: number; // A zero-based index for the frame at the current
@@ -1018,9 +1060,9 @@ interface FlashXMLUI {
 	getControlItemElement();
 	getEnabled();
 	getVisible();
-	met();
-	metControItemElement();
-	metControItemElements();
+	set();
+	setControItemElement();
+	setControItemElements();
 	setEnabled();
 	setVisible();
 }
