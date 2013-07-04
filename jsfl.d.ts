@@ -487,7 +487,7 @@ interface FlashMath {
 	pointDistance(pt1: FlashPoint, pt2: FlashPoint): number;
 }
 
-interface FlashOutputPannel {
+interface FlashOutputPanel {
 	/** Method; clears the contents of the Output panel. You can use this method in a batch processing application to clear a list of errors, or to save them incrementally by using this method withoutputPanel.save(). */
 	clear(): void;
 
@@ -705,6 +705,81 @@ interface FlashDrawingLayer {
 	setStroke(): void;
 }
 
+interface FlashXMLUI {
+	accept();
+	cancel();
+	get();
+	getControlItemElement();
+	getEnabled();
+	getVisible();
+	met();
+	metControItemElement();
+	metControItemElements();
+	setEnabled();
+	setVisible();
+}
+
+interface FlashActionsPanel {
+	getClassForObject();
+	getScriptAssistMode();
+	getSelectedText();
+	getText();
+	hasSelection();
+	replaceSelectedText();
+	setScriptAssistMode();
+	setSelection();
+	setText();
+}
+
+interface FlashCompilerErrors {
+	clear();
+	save();
+}
+
+interface FlashComponentsPanel {
+	addItemToDocument();
+	reload();
+}
+
+interface FlashPresetPanel {
+	addNewItem();
+	applyPreset();
+	deleteFolder();
+	deleteItem();
+	expandFolder();
+	exportItem();
+	findItemIndex();
+	getSelectedItems();
+	importItem();
+	moveToFolder();
+	newFolder();
+	renameItem();
+	selectItem();
+}
+
+interface FlashSwfPanel {
+	call();
+	setFocus();
+	name;
+	path;
+}
+
+interface FlashTools {
+	constraintPoint();
+	getKeyDown();
+	setCreatingBbox();
+	setCursor();
+	snapPoint();
+	activeTool;
+	altIsDown;
+	ctlIsDown;
+	mouseIsDown;
+	penDownLoc;
+	penLoc;
+	shiftIsDown;
+	toolObjs;
+}
+
 interface FlashFL {
 	addEventListener(eventType, callbackFunction);
 	browseForFileURL(browseType, title?, previewArea?);
@@ -714,7 +789,7 @@ interface FlashFL {
 	closeAll(bPromptToSave?: boolean): void;
 	closeAllPlayerDocuments(): boolean;
 	closeDocument(documentObject: FlashDocument, bPromptToSaveChanges?: boolean);
-	closeProject();
+	//closeProject();
 	/** A string that specifies the type of document to create. Acceptable values are "timeline", "presentation", and "application". The default value is "timeline", which has the same effect as choosing File > New > Flash File (ActionScript 3.0). This parameter is optional. */
 	createDocument(document?: string): FlashDocument;
 
@@ -731,62 +806,104 @@ interface FlashFL {
 	/** elementType = "shape", "text", "instance", or "shapeObj". */
 	findObjectInDocByType(elementType: string, document: FlashDocument): any[];
 	getAppMemoryInfo(memType: number);
-    
-    /*
-     * Method; retrieves the DOM (Document object) of the currently active document (FLA file).
-     * If one or more documents are open but a document does not currently have focus (for
-     * example, if a JSFL file has focus), retrieves the DOM of the most recently active document.
-     * getDocumentDOM(): Document;
-     */
-    getDocumentDOM(): FlashDocument;
+	
+	/*
+	 * Method; retrieves the DOM (Document object) of the currently active document (FLA file).
+	 * If one or more documents are open but a document does not currently have focus (for
+	 * example, if a JSFL file has focus), retrieves the DOM of the most recently active document.
+	 * getDocumentDOM(): Document;
+	 */
+	getDocumentDOM(): FlashDocument;
 
-	getProject();
-	mapPlayerURL();
-	openDocument();
-	openProject();
-	openScript();
-	quit();
-	reloadEffects();
-	reloadTools();
-	removeEventListener();
-	resetAS3PackagePaths();
-	resetPackagePaths();
-	revertDocumentToLastVersion();
-	runScript(fileURI:string, funcName?: Function, args?: any[]): any;
-	saveAll();
-	saveVersionOfDocument();
-	saveDocument();
-	saveDocumentAs();
-	selectElement();
-	selectTool();
-	selectActiveWindow();
-	showIdleMessage();
-	synchronizeDocumentWithHeadVersion();
-	trace(message:any):void;
-	actionsPanel;
-	activeEffect;
-	as3PackagePaths;
-	compilerErrors;
-	componentsPanel;
-	configDirectory;
-	configURI;
-	contactSensitiveSelection;
-	createNewDocList;
-	createNewDocListType;
-	createNewTemplateList;
-    documents: FlashDocument[];
+	//getProject();
+
+	getSwfPanel();
+
+	isFontInstalled();
+
+
+	mapPlayerURL(URI: string, returnMBCS?: boolean): string;
+
+	/** Method; opens a Flash document (FLA file) for editing in a new Flash Document window and gives it focus. For a user, the effect is the same as selecting File > Open and then selecting a file. If the specified file is already open, the window that contains the document comes to the front. The window that contains the specified file becomes the currently selected document. */
+	openDocument(fileURI: string): FlashDocument;
+
+	//openProject();
+
+	openScript(fileURI: string, createExtension?: string, className?: string): void;
+
+	quit(bPromptIfNeeded?: boolean): void;
+
+	//reloadEffects(): void;
+
+	reloadTools(): void;
+
+	/** documentNew", "documentOpened", "documentClosed", "mouseMove", "documentChanged", "layerChanged", and "frameChanged". */
+	removeEventListener(eventType: string): boolean;
+	resetAS3PackagePaths(): void;
+	resetPackagePaths(): void;
+	revertDocument(document: FlashDocument): void;
+	//revertDocumentToLastVersion();
+
+	runScript(fileURI: string, funcName?: Function, args?: any[]): any;
+
+	saveAll(): void;
+
+	//saveVersionOfDocument();
+	saveDocument(document: FlashDocument, fileURI?: string): boolean;
+	saveDocumentAs(document: FlashDocument): boolean;
+
+	/** Method; enables selection or editing of an element. Generally, you will use this method on objects returned by fl.findObjectInDocByName() or fl.findObjectInDocByType(). */
+	selectElement(elementObject: FlashElement, editMode: boolean): boolean;
+
+	/** "arrow","bezierSelect","freeXform","fillXform","lasso","pen","penplus","penminus","penmodify","text","line","rect","oval","rectPrimitive","ovalPrimitive","polystar","pencil","brush","inkBottle","bucket","eyeDropper","eraser","hand", and "magnifier". */
+	selectTool(toolName: string): void;
+
+	selectActiveWindow(document: FlashDocument, bActivateFrame?: boolean): void;
+
+	showIdleMessage(show: boolean): void;
+
+	toggleBreakpoint();
+
+	//synchronizeDocumentWithHeadVersion();
+	trace(message: any): void;
+	
+	actionsPanel: FlashActionsPanel;
+	//activeEffect;
+	as3PackagePaths: string;
+	compilerErrors: FlashCompilerErrors;
+	componentsPanel: FlashComponentsPanel;
+	configDirectory: string;
+	configURI: string;
+	contactSensitiveSelection: boolean;
+	createNewDocList: string[];
+	createNewDocListType: string[];
+	createNewTemplateList: string[];
+	documents: FlashDocument[];
 	drawingLayer: FlashDrawingLayer;
-	effects;
+	//effects;
+	externalLibraryPath: string;
+	flexSDKPath: string;
+	installedPlayers: any[];
+	languageCode: string;
+	libraryPath: string;
 	Math: FlashMath;
-	mruRecentFileList;
-	mruRecentFileListType;
-	packagePaths;
-	objectDrawingMode;
-	outputPanel: FlashOutputPannel;
+	mruRecentFileList: string[];
+	mruRecentFileListType: string[];
+	packagePaths: string[];
+	publishCacheDiskSizeMax: number;
+	publishCacheEnabled: boolean;
+	publishCacheMemoryEntrySizeLimit: number;
+	publishCacheMemorySizeMax: number;
+
+	objectDrawingMode: number;
+	outputPanel: FlashOutputPanel;
+	presetPanel: FlashPresetPanel;
 	scriptURI: string;
-	tools;
-	version;
-	xmlui;
+	sourcePath: string;
+	swfPanels: FlashSwfPanel[];
+	tools: FlashTools[];
+	version: string;
+	xmlui: FlashXMLUI;
 }
 
 declare var fl:FlashFL;
