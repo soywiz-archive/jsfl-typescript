@@ -12,7 +12,7 @@ interface Matrix {
 	ty: number;
 }
 
-interface Document {
+interface FlashDocument {
 	addDataToDocument(); // Stores specified data with a document.
 	addDataToSelection(); // Stores specified data with the selected object(s).
 	addFilter(); // Applies a filter to the selected objects.
@@ -28,12 +28,9 @@ interface Document {
 	breakApart(); // Performs a break-apart operation on the current
 	canEditSymbol(); // Indicates whether the Edit Symbols menu and
 	canRevert(); // Determines whether you can use the
-	revert(); // or fl.revertDocument()
 	canSaveAVersion(); // Determines whether a version of the specified
 	canTestMovie(); // Determines whether you can use the
-	testMovie(); // method successfully.
 	canTestScene(); // Determines whether you can use the
-	testScene(); // method successfully.
 	changeFilterOrder(); // Changes the index of the filter in the Filter list.
 	clipCopy(); // Copies the current selection from the document
 	clipCut(); // Cuts the current selection from the document
@@ -76,7 +73,7 @@ interface Document {
 	getPlayerVersion(); // Returns a string that represents the targeted
 	getSelectionRect(); // Gets the bounding rectangle of the current
 	getTextString(); // Gets the currently selected text.
-	getTimeline(); // Retrieves the current Timeline object in the
+	getTimeline(): Timeline; // Retrieves the current Timeline object in the
 	getTransformationPoint(); // Gets the location of the transformation point of
 	group(); // Converts the current selection to a group.
 	importFile(); // Imports a file into the document.
@@ -87,7 +84,7 @@ interface Document {
 	mouseClick(); // Performs a mouse click from the Selection tool.
 	mouseDblClk(); // Performs a double mouse click from the
 	moveSelectedBezierPointsBy(); // If the selection contains at least one path with at
-	moveSelectionBy(); // Moves selected objects by a specified distance.
+    moveSelectionBy(distanceToMove:Point); // Moves selected objects by a specified distance.
 	optimizeCurves(); // Optimizes smoothing for the current selection,
 	publish(); // Publishes the document according to the active
 	punch(); // Uses top selected drawing object to punch
@@ -103,13 +100,13 @@ interface Document {
 	resetTransformation(); // Resets the transformation matrix; equivalent to
 	revert(); // Reverts the specified document to its previously
 	revertToLastVersion(); // Reverts the specified document to the version
-	rotateSelection(); // Rotates the selection by a specified number of
-	save(); // Saves the document in its default location;
+	rotateSelection(angle: number, rotationPoint?: string); // Rotates the selection by a specified number of
+    save(bOkToSaveAs?: boolean); // Saves the document in its default location;
 	saveAndCompact(); // Saves and compacts the file; equivalent to
 	saveAVersion(); // Saves a version of the specified document to the
-	scaleSelection(; // Scales the selection by a specified amount;
-	selectAll(); // Selects all items on the Stage; equivalent to
-	selectNone(); // Deselects any selected items.
+	scaleSelection(); // Scales the selection by a specified amount;
+	selectAll(): void; // Selects all items on the Stage; equivalent to
+    selectNone(): void; // Deselects any selected items.
 	setAlignToDocument(); // Sets the preferences for document.align(),
 	setBlendMode(); // Sets the blending mode for the selected objects.
 	setCustomFill(); // Sets the fill settings for the Tools panel, Property
@@ -162,11 +159,11 @@ interface Document {
 	autoLabel; // A Boolean value that is equivalent to the Auto
 	backgroundColor; // A string, hexadecimal value, or integer that
 	currentPublishProfile; // A string that specifies the name of the active
-	currentTimeline; // An integer that specifies the index of the active
+	currentTimeline: Timeline; // An integer that specifies the index of the active
 	description; // A string that is equivalent to the Description field in
 	docClass; // Specifies the top-level ActionScript 3.0 class
 	forceSimple; // A Boolean value that specifies whether the children
-	frameRate; // A float value that specifies the number of frames
+    frameRate: number; // A float value that specifies the number of frames
 	height; // An integer that specifies the height of the
 	id; // A unique integer (assigned automatically) that
 	library; // Read-only; the library object for a document.
@@ -175,12 +172,12 @@ interface Document {
 	path; // Read-only; a string that represents the path of the
 	publishProfiles; // Read-only; an array of the publish profile names for
 	screenOutline; // Read-only; the current ScreenOutline object for the
-	selection; // An array of the selected objects in the document.
+	selection: any[]; // An array of the selected objects in the document.
 	silent; // A Boolean value that specifies whether the object
 	timelines: Timeline[]; // Read-only; an array of Timeline objects (see
-	viewMatrix; // Read-only; a Matrix object.
-	width; // An integer that specifies the width of the document
-	zoomFactor; // Specifies the zoom percent of the Stage at author
+	viewMatrix: Matrix; // Read-only; a Matrix object.
+	width: number; // An integer that specifies the width of the document
+    zoomFactor: number; // Specifies the zoom percent of the Stage at author
 }
 
 interface FLfile {
@@ -318,12 +315,12 @@ interface Oval {
 }
 
 interface Timeline {
-	timeline.currentFrame: number; // A zero-based index for the frame at the current
-	timeline.currentLayer: number; // A zero-based index for the currently active layer.
-	timeline.frameCount: number; // Read-only; an integer that represents the number of
-	timeline.layerCount: number; // Read-only; an integer that represents the number of
-	timeline.layers: Layer[]; // Read-only; an array of layer objects.
-	timeline.name: string; // A string that represents the name of the current
+	currentFrame: number; // A zero-based index for the frame at the current
+	currentLayer: number; // A zero-based index for the currently active layer.
+	frameCount: number; // Read-only; an integer that represents the number of
+	layerCount: number; // Read-only; an integer that represents the number of
+	layers: Layer[]; // Read-only; an array of layer objects.
+	name: string; // A string that represents the name of the current
 }
 
 interface FL {
@@ -334,10 +331,10 @@ interface FL {
 	closeAllPlayerDocuments();
 	closeDocument();
 	closeProject();
-	createDocument(document?: string): Document;
-	createDocument(document?: "timeline"): Document;
-	createDocument(document?: "presentation"): Document;
-	createDocument(document?: "application"): Document;
+    createDocument(document?: string): FlashDocument;
+    createDocument(document?: "timeline"): FlashDocument;
+    createDocument(document?: "presentation"): FlashDocument;
+    createDocument(document?: "application"): FlashDocument;
 	createProject();
 	downloadLatestVersion();
 	enableImmediateUpdates();
@@ -347,14 +344,14 @@ interface FL {
 	findObjectInDocByName();
 	findObjectInDocByType();
 	getAppMemoryInfo();
-	
-	/*
-	 * Method; retrieves the DOM (Document object) of the currently active document (FLA file).
-	 * If one or more documents are open but a document does not currently have focus (for
-	 * example, if a JSFL file has focus), retrieves the DOM of the most recently active document.
-	 * getDocumentDOM(): Document;
-	 */
-	getDocumentDOM(): Document;
+    
+    /*
+     * Method; retrieves the DOM (Document object) of the currently active document (FLA file).
+     * If one or more documents are open but a document does not currently have focus (for
+     * example, if a JSFL file has focus), retrieves the DOM of the most recently active document.
+     * getDocumentDOM(): Document;
+     */
+    getDocumentDOM(): FlashDocument;
 
 	getProject();
 	mapPlayerURL();
@@ -378,7 +375,7 @@ interface FL {
 	selectActiveWindow();
 	showIdleMessage();
 	synchronizeDocumentWithHeadVersion();
-	trace();
+	trace(message:any):void;
 	actionsPanel;
 	activeEffect;
 	as3PackagePaths;
@@ -390,7 +387,7 @@ interface FL {
 	createNewDocList;
 	createNewDocListType;
 	createNewTemplateList;
-	documents: Document[];
+    documents: FlashDocument[];
 	drawingLayer;
 	effects;
 	Math;
