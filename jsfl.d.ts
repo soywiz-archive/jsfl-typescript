@@ -3,6 +3,10 @@ interface FlashPoint {
 	y: number;
 }
 
+interface FlashPoint3D extends FlashPoint {
+	z: number;
+}
+
 interface FlashRectangle {
 	top: number;
 	right: number;
@@ -17,6 +21,58 @@ interface FlashMatrix {
 	d: number;
 	tx: number;
 	ty: number;
+}
+
+interface FlashSymbolInstance {
+	accName: string;
+	actionScript: string;
+	backgroundColor: string;
+	bitmapRenderMode: string;
+	blendMode: string;
+	buttonTracking: string;
+	cacheAsBitmap: boolean;
+	colorAlphaAmount: number;
+	colorAlphaPercent: number;
+	colorBlueAmount: number;
+	colorBluePercent: number;
+	colorGreenAmount: number;
+	colorGreenPercent: number;
+	colorMode: string;
+	colorRedAmount: number;
+	colorRedPercent: number;
+	description: string;
+	filters: FlashFilter[];
+	firstFrame: number;
+	forceSimple: boolean;
+	loop: string;
+	shortcut: string;
+	silent: boolean;
+	symbolType: string;
+	tabIndex: number;
+	useBackgroundColor: boolean;
+	visible: boolean;
+}
+
+interface FlashFilter {
+	angle: number;
+	blurX: number;
+	blurY: number;
+	brightness: number;
+	color: any;
+	contrast: number;
+	distance: number;
+	enabled: boolean;
+	hideObject: boolean;
+	highlightColor: any;
+	hue: number;
+	inner: boolean;
+	knockout: boolean;
+	name: string;
+	quality: string;
+	saturation: number;
+	shadowColor: any;
+	strength: number;
+	type: string;
 }
 
 interface FlashDocument {
@@ -37,111 +93,340 @@ interface FlashDocument {
 	allowScreens(): void; // Use this method before using the
 	/** Arranges the selection on the Stage. "back", "backward", "forward", and "front" */
 	arrange(arrangeMode: string): void;
-	breakApart(); // Performs a break-apart operation on the current
-	canEditSymbol(); // Indicates whether the Edit Symbols menu and
-	canRevert(); // Determines whether you can use the
-	canSaveAVersion(); // Determines whether a version of the specified
-	canTestMovie(); // Determines whether you can use the
-	canTestScene(); // Determines whether you can use the
-	changeFilterOrder(); // Changes the index of the filter in the Filter list.
-	clipCopy(); // Copies the current selection from the document
-	clipCut(); // Cuts the current selection from the document
-	clipPaste(); // Pastes the contents of the Clipboard into the
-	close(); // Closes the specified document.
-	convertLinesToFills(); // Converts lines to fills on the selected objects.
-	convertToSymbol(type: string, name: string, registrationPoint: string); // Converts the selected Stage item(s) to a new
-	crop(); // Uses the top selected drawing object to crop all
-	deleteEnvelope(); // Deletes the envelope (bounding box that
-	deletePublishProfile(); // Deletes the currently active profile, if there is
-	deleteScene(); // Deletes the current scene (Timeline object), and
-	deleteSelection(); // Deletes the current selection on the Stage.
-	disableAllFilters(); // Disables all filters on the selected objects.
-	disableFilter(); // Disables the specified filter in the Filters list.
-	disableOtherFilters(); // Disables all filters except the one at the specified
-	distribute(); // Distributes the selection.
-	distributeToLayers(); // Performs a distribute-to-layers operation on the
-	documentHasData(); // Checks the document for persistent data with the
-	duplicatePublishProfile(); // Duplicates the currently active profile and gives
-	duplicateScene(); // Makes a copy of the currently selected scene,
-	duplicateSelection(); // Duplicates the selection on the Stage.
-	editScene(index: number): void; // Makes the specified scene the currently selected
-	enableAllFilters(); // Enables all the filters on the Filters list for the
-	enableFilter(); // Enables the specified filter for the selected
-	enterEditMode(); // Switches the authoring tool into the editing mode
-	exitEditMode(); // Exits from symbol-editing mode and returns
-	exportPNG(); // Exports the document as one or more PNG files.
-	exportPublishProfile(); // Exports the currently active profile to an XML
-	exportSWF(); // Exports the document in the Flash SWF format.
-	getAlignToDocument(); // Identical to retrieving the value of the To Stage
-	getBlendMode(); // Returns a string that specifies the blending mode
-	getCustomFill(); // Retrieves the fill object of the selected shape, or
-	getCustomStroke(); // Returns the stroke object of the selected shape,
-	getDataFromDocument(); // Retrieves the value of the specified data.
-	getElementProperty(); // Gets the specified Element property for the
-	getElementTextAttr(); // Gets a specified TextAttrs property of the
-	getFilters(); // Returns an array that contains the list of filters
-	getMetadata(); // Returns a string containing the XML metadata
-	getMobileSettings(); // Returns the string passed to
-	getPlayerVersion(); // Returns a string that represents the targeted
-	getSelectionRect(): FlashRectangle; // Gets the bounding rectangle of the current
-	getTextString(); // Gets the currently selected text.
-	getTimeline(): FlashTimeline; // Retrieves the current Timeline object in the
-	getTransformationPoint(); // Gets the location of the transformation point of
-	group(); // Converts the current selection to a group.
-	importFile(); // Imports a file into the document.
-	importPublishProfile(); // Imports a profile from a file.
-	importSWF(); // Imports a SWF file into the document.
-	intersect(); // Creates an intersection drawing object from all
-	match(); // Makes the size of the selected objects the same.
-	mouseClick(); // Performs a mouse click from the Selection tool.
-	mouseDblClk(); // Performs a double mouse click from the
-	moveSelectedBezierPointsBy(); // If the selection contains at least one path with at
-	moveSelectionBy(distanceToMove: FlashPoint); // Moves selected objects by a specified distance.
-	optimizeCurves(); // Optimizes smoothing for the current selection,
-	publish(); // Publishes the document according to the active
-	punch(); // Uses top selected drawing object to punch
-	removeAllFilters(); // Removes all filters from the selected object(s).
-	removeDataFromDocument(); // Removes persistent data with the specified
-	removeDataFromSelection(); // Removes persistent data with the specified
-	removeFilter(); // Removes the specified filter from the Filters list
-	renamePublishProfile(); // Renames the current profile.
-	renameScene(); // Renames the currently selected scene in the
-	reorderScene(); // Moves the specified scene before another
-	resetOvalObject(); // Sets all values in the Property inspector to
-	resetRectangleObject(); // Sets all values in the Property inspector to
-	resetTransformation(); // Resets the transformation matrix; equivalent to
-	revert(); // Reverts the specified document to its previously
-	revertToLastVersion(); // Reverts the specified document to the version
-	rotateSelection(angle: number, rotationPoint?: string); // Rotates the selection by a specified number of
-    save(bOkToSaveAs?: boolean); // Saves the document in its default location;
-	saveAndCompact(); // Saves and compacts the file; equivalent to
-	saveAVersion(); // Saves a version of the specified document to the
-	scaleSelection(); // Scales the selection by a specified amount;
-	selectAll(): void; // Selects all items on the Stage; equivalent to
-    selectNone(): void; // Deselects any selected items.
-	setAlignToDocument(); // Sets the preferences for document.align(),
-	setBlendMode(); // Sets the blending mode for the selected objects.
-	setCustomFill(); // Sets the fill settings for the Tools panel, Property
-	setCustomStroke(); // Sets the stroke settings for the Tools panel,
-	setElementProperty(); // Sets the specified Element property on selected
-	setElementTextAttr(); // Sets the specified TextAttrs property of the
-	setFillColor(); // Changes the fill color of the selection to the
-	setFilterProperty(); // Sets a specified filter property for the currently
-	setFilters(); // Applies filters to the selected objects .
-	setInstanceAlpha(); // Sets the opacity of the instance.
-	setInstanceBrightness(); // Sets the brightness for the instance.
-	setInstanceTint(); // Sets the tint for the instance.
-	setMetadata(); // Sets the XML metadata for the specified
-	setMobileSettings(); // Sets the value of an XML settings string in a
-	setOvalObjectProperty(); // Specifies a value for a specified property of
-	setPlayerVersion(); // Sets the version of the Flash Player targeted by
-	setRectangleObjectProperty(); // Specifies a value for a specified property of
-	setSelectionBounds(); // Moves and resizes the selection in a single
-	setSelectionRect(); // Draws a rectangular selection marquee relative
-	setStroke(); // Sets the color, width, and style of the selected
-	setStrokeColor(); // Changes the stroke color of the selection to the
-	setStrokeSize(); // Changes the stroke size of the selection to the
-	setStrokeStyle(); // Changes the stroke style of the selection to the
+	
+	/** Performs a break-apart operation on the current */
+	breakApart(): void;
+	
+	/** Indicates whether the Edit Symbols menu and */
+	canEditSymbol(): boolean;
+	
+	/** Determines whether you can use the */
+	canRevert(): boolean;
+	
+	///** Determines whether a version of the specified */
+	//canSaveAVersion(): boolean;
+
+	/** Determines whether you can use the */
+	canTestMovie(): boolean;
+	
+	/** Determines whether you can use the */
+	canTestScene(): boolean;
+
+	/** Changes the index of the filter in the Filter list. */
+	changeFilterOrder(oldIndex: number, newIndex: number): void;
+
+	/** Copies the current selection from the document */
+	clipCopy(): void;
+	
+	/** Cuts the current selection from the document */
+	clipCut(): void;
+	
+	/** Pastes the contents of the Clipboard into the document. */
+	clipPaste(bInPlace?: boolean): void;
+
+	/** Closes the specified document. */
+	close(bPromptToSaveChanges?: boolean): void;
+
+	/** Converts lines to fills on the selected objects. */
+	convertLinesToFills(): void;
+
+	/** Converts the selected Stage item(s) to a new */
+	convertToSymbol(type: string, name: string, registrationPoint: string): FlashSymbolInstance;
+
+	/** Uses the top selected drawing object to crop all */
+	crop(): void;
+
+	/** Method; Invokes the Debug Movie command on the document. */
+	debugMovie(abortIfErrorsExist?: boolean): void;
+
+	/** Deletes the envelope (bounding box that */
+	deleteEnvelope(): boolean;
+
+	/** Deletes the currently active profile, if there is */
+	deletePublishProfile(): boolean;
+	
+	/** Deletes the current scene (Timeline object), and */
+	deleteScene(): boolean;
+
+	/** Deletes the current selection on the Stage. */
+	deleteSelection(): void;
+
+	/** Disables all filters on the selected objects. */
+	disableAllFilters(): void;
+
+	/** Disables the specified filter in the Filters list. */
+	disableFilter(filterIndex: number): void;
+
+	/** Disables all filters except the one at the specified */
+	disableOtherFilters(enabledFilterIndex: number): void;
+
+	/** Distributes the selection. */
+	distribute(distributemode: string, bUseDocumentBounds?: boolean): void;
+
+	/** Performs a distribute-to-layers operation on the */
+	distributeToLayers(): void;
+
+	/** Checks the document for persistent data with the */
+	documentHasData(name: string): boolean;
+
+	/** Duplicates the currently active profile and gives */
+	duplicatePublishProfile(profileName?: string): number;
+
+	/** Makes a copy of the currently selected scene, */
+	duplicateScene(): boolean;
+
+	/** Duplicates the selection on the Stage. */
+	duplicateSelection(): void;
+
+	/** Makes the specified scene the currently selected */
+	editScene(index: number): void;
+
+	/** Enables all the filters on the Filters list for the */
+	enableAllFilters(): void;
+
+	/** Enables the specified filter for the selected */
+	enableFilter(filterIndex: number): void;
+
+	/** Switches the authoring tool into the editing mode */
+	enterEditMode(editMode?: string): void;
+
+	/** Exits from symbol-editing mode and returns */
+	exitEditMode(): void;
+
+	/** Exports the document as one or more PNG files. */
+	exportPNG(fileURI: string, bCurrentPNGSettings?: boolean, bCurrentFrame?: boolean): boolean;
+
+	/** Exports the currently active profile to an XML */
+	exportPublishProfile(fileURI: string): void;
+
+	/** returns a string that specifies, in XML format, the specified profile. If you don’t pass a value for profileName, the current profile is exported. */
+	exportPublishProfileString(profileName?: string): string;
+
+	/** Exports the document in the Flash SWF format. */
+	exportSWF(fileURI: string, bCurrentSettings?: boolean): void;
+
+	/** Identical to retrieving the value of the To Stage */
+	getAlignToDocument(): boolean;
+
+	/** Returns a string that specifies the blending mode */
+	getBlendMode(): string;
+
+	/** Retrieves the fill object of the selected shape, or */
+	getCustomFill(objectToFill?: string): FlashFill;
+
+	/** Returns the stroke object of the selected shape, */
+	getCustomStroke(locationOfStroke?: string): FlashStroke;
+
+	/** Retrieves the value of the specified data. */
+	getDataFromDocument(name: string): any;
+
+	/** Gets the specified Element property for the */
+	getElementProperty(propertyName: string): any;
+
+	/** Gets a specified TextAttrs property of the*/
+	getElementTextAttr(attrName: string, startIndex?: number, endIndex?: number): FlashTextAttrs;
+
+	/** Returns an array that contains the list of filters*/
+	getFilters(): FlashFilter[];
+
+	/** Returns a string containing the XML metadata */
+	getMetadata(): string;
+
+	/** returns the mobile XML settings for the document. */
+	getMobileSettings(): string;
+
+	/** Returns a string that represents the targeted */
+	getPlayerVersion(): string;
+
+	/** Gets the bounding rectangle of the current */
+	getSelectionRect(): FlashRectangle;
+
+	/** Gets the currently selected text. */
+	getTextString(startIndex?: number, endIndex?: number): string;
+
+	/** Retrieves the current Timeline object in the */
+	getTimeline(): FlashTimeline;
+
+	/** gets the location of the transformation point of the current selection. You can use the transformation point for commutations such as rotate and skew. */
+	getTransformationPoint(): FlashPoint;
+
+	/** Converts the current selection to a group.*/
+	group(): void;
+
+	/** Imports a file into the document. */
+	importFile(fileURI: string, importToLibrary?: boolean): void;
+
+	/** Imports a profile from a file. */
+	importPublishProfile(fileURI: string): number;
+
+	/** imports an XML string that represents a publish profile and sets it as the current profile. To generate an XML string to import, use document.exportPublishProfileString() before using this method. */
+	importPublishProfileString(xmlString: string): number;
+
+	/** Imports a SWF file into the document.*/
+	importSWF(fileURI: string): void;
+
+	/** creates an intersection drawing object from all selected drawing objects. This method returns false if there are no drawing objects selected, or if any of the selected items are not drawing objects. */
+	intersect(): boolean;
+
+	/** loads a cue point XML file. The format and DTD of the XML file is the same as the one imported and exported by the Cue Points Property inspector. The return value is the same as the string serialized in the Cue Point property of the object containing the instance of an FLVPlayback Component. */
+	loadCuepointXML(uri: string): any[];
+
+	/** Makes the size of the selected objects the same. */
+	match(bWidth: boolean, bHeight: boolean, bUseDocumentBounds?: boolean): void;
+
+	/** Performs a mouse click from the Selection tool. */
+	mouseClick(position: FlashPoint, bToggleSel: boolean, bShiftSel: boolean): void;
+
+	/** Performs a double mouse click from the */
+	mouseDblClk(position: FlashPoint, bAltDown: boolean, bShiftDown: boolean, bShiftSelect: boolean): void;
+	
+	/** If the selection contains at least one path with at */
+	moveSelectedBezierPointsBy(delta: FlashPoint): void;
+
+	/** Moves selected objects by a specified distance. */
+	moveSelectionBy(distanceToMove: FlashPoint): void;
+
+	/** Optimizes smoothing for the current selection, */
+	optimizeCurves(smoothing: number, bUseMultiplePasses: boolean): void;
+	
+	/** Publishes the document according to the active */
+	publish(): void;
+
+	/** uses the top selected drawing object to punch through all selected drawing objects underneath it. This method returns false if there are no drawing objects selected or if any of the selected items are not drawing objects.  */
+	punch(): boolean;
+
+	/** Removes all filters from the selected object(s).*/
+	removeAllFilters(): void;
+
+	/** Removes persistent data with the specified*/
+	removeDataFromDocument(name: string): void;
+
+	/** Removes persistent data with the specified */
+	removeDataFromSelection(name: string): void;
+
+	/** Removes the specified filter from the Filters list*/
+	removeFilter(filterIndex: number): void;
+
+	/** Renames the current profile.*/
+	renamePublishProfile(profileNewName?: string): boolean;
+
+	/** Renames the currently selected scene in the */
+	renameScene(name: string): boolean;
+
+	/** Moves the specified scene before another */
+	reorderScene(sceneToMove: number, sceneToPutItBefore: number): void;
+
+	/** Sets all values in the Property inspector to */
+	resetOvalObject(): void;
+
+	/** Sets all values in the Property inspector to */
+	resetRectangleObject(): void;
+
+	/** Resets the transformation matrix; equivalent to */
+	resetTransformation(): void;
+
+	/** Method; reverts the specified document to its previously saved version. This method is equivalent to selecting File > Revert. */
+	revert(): void;
+
+	///** Reverts the specified document to the version */
+	//revertToLastVersion();
+
+	/** applies a 3D rotation to the selection. This method is available only for movie clips. */
+	rotate3DSelection(xyzCoordinate: FlashPoint3D, bGlobalTransform: boolean): void;
+
+	/** Rotates the selection by a specified number of */
+	rotateSelection(angle: number, rotationPoint?: string): void;
+
+	/** Saves the document in its default location;*/
+	save(bOkToSaveAs?: boolean): boolean;
+
+	/** saves and compacts the file. This method is equivalent to selecting File > Save and Compact. */
+	saveAndCompact(bOkToSaveAs?: boolean): boolean; 
+
+	//saveAsVersion(); // Saves a version of the specified document to the
+
+	/** Scales the selection by a specified amount;*/
+	scaleSelection(xScale: number, yScale: number, whichCorner?: string): void;
+
+	/** Selects all items on the Stage; equivalent to*/
+	selectAll(): void;
+
+	/** Deselects any selected items. */
+	selectNone(): void;
+
+	/** Sets the preferences for document.align(),*/
+	setAlignToDocument(bToStage?: boolean): void;
+
+	/** Sets the blending mode for the selected objects.*/
+	setBlendMode(mode: string): void;
+	
+	/** Sets the fill settings for the Tools panel, Property */
+	setCustomFill(fill: FlashFill): void;
+
+	/** Sets the stroke settings for the Tools panel,*/
+	setCustomStroke(stroke: FlashStroke): void;
+
+	/** Sets the specified Element property on selected */
+	setElementProperty(property: string, value: number): void;
+
+	/** Sets the specified TextAttrs property of the */
+	setElementTextAttr(attrName: string, attrValue: FlashTextAttrs, startIndex?: number, endIndex?: number): boolean;
+
+	/** Changes the fill color of the selection to the */
+	setFillColor(color: any): void;
+
+	/** Sets a specified filter property for the currently */
+	setFilterProperty(property: string, filterIndex: number, value: any): void;
+	
+	/** Applies filters to the selected objects .*/
+	setFilters(filterArray: FlashFilter[]): void;
+
+	/** Sets the opacity of the instance. */
+	setInstanceAlpha(opacity: number): void;
+
+	/** Sets the brightness for the instance. */
+	setInstanceBrightness(brightness: number): void;
+
+	/** Sets the tint for the instance.*/
+	setInstanceTint(color: any, strength: number): void;
+
+	/** Sets the XML metadata for the specified */
+	setMetadata(strMetadata: string): boolean;
+
+	/** Sets the value of an XML settings string in a */
+	setMobileSettings(xmlString: string): boolean;
+
+	/** Specifies a value for a specified property of*/
+	setOvalObjectProperty(propertyName: string, value: any): void;
+
+	/** Sets the version of the Flash Player targeted by*/
+	setPlayerVersion(version: string): boolean;
+
+	/** Specifies a value for a specified property of*/
+	setRectangleObjectProperty(propertyName: string, value: any): void;
+
+	/** Moves and resizes the selection in a single */
+	setSelectionBounds(boundingRectangle: FlashRectangle, bContactSensitiveSelection?: boolean): void;
+	
+	/** Draws a rectangular selection marquee relative */
+	setSelectionRect(rect: FlashRectangle, bReplaceCurrentSelection?: boolean, bContactSensitiveSelection?: boolean): void;
+
+	/** Specifies the vanishing point for viewing 3D objects. */
+	setStageVanishingPoint(point: FlashPoint): void;
+
+	setStageViewAngle(angle: number): void;
+
+	/** Sets the color, width, and style of the selected */
+	setStroke(color: any, size: number, strokeType: string): void;
+
+	/** Changes the stroke color of the selection to the*/
+	setStrokeColor(color: any): void;
+
+	/** Changes the stroke size of the selection to the*/
+	setStrokeSize(size: number): void;
+	
+	/** Changes the stroke style of the selection to the */
+	setStrokeStyle(strokeType: string): void;
 	
 	/** Changes the bounding rectangle for the selected */
 	setTextRectangle(boundingRectangle: FlashRectangle): boolean;
@@ -231,6 +516,27 @@ interface FlashDocument {
 	
 	/** Specifies the zoom percent of the Stage at author */
 	zoomFactor: number;
+}
+
+interface FlashTextAttrs {
+	aliasText: boolean;
+	alignment: string;
+	autoKern: boolean;
+	bold: boolean;
+	characterPosition: string;
+	characterSpacing: number;
+	face: string;
+	fillColor: any;
+	indent: number;
+	italic: boolean;
+	leftMargin: number;
+	letterSpacing: number;
+	lineSpacing: number;
+	rightMargin: number;
+	rotation: boolean;
+	size: number;
+	target: string;
+	url: string;
 }
 
 interface FlashFLfile {
@@ -342,27 +648,27 @@ interface FlashFolderItem {
 
 interface FlashFontItem {
 	// Specifies whether the Font item is bitmapped.
-	bitmap;
+	bitmap: boolean;
 	// Specifies whether the Font item is bold.
-	bold;
+	bold: boolean;
 	// Specifies characters to embed.
-	embeddedCharacters;
+	embeddedCharacters: string;
 	// Specifies items that can be selected in the Font Embedding dialog.
-	embedRanges;
+	embedRanges: string;
 	// Specifies whether variant glyphs should be output in the font when publishing a SWF file.
-	embedVariantGlyphs;
+	embedVariantGlyphs: boolean;
 	// The name of the device font associated with the Font item.
-	font;
+	font: string;
 	// Specifies the format of the font that is output when publishing a SWF filem.
-	isDefineFont4Symbol;
+	isDefineFont4Symbol: boolean;
 	// Specifies whether the Font item is italic.
-	italic;
+	italic: boolean;
 	// The size of the Font item, in points.
-	size;
+	size: number;
 }
 
 interface FlashSoundItem {
-	exportToFile();
+	exportToFile(fileURI: string): boolean;
 	bitRate: string;
 	bits: string;
 	compressionType: string;
@@ -375,7 +681,7 @@ interface FlashSoundItem {
 }
 
 interface FlashVideoItem {
-	exportToFLV();
+	exportToFLV(fileURI: string): boolean;
 	fileLastModifiedDate: string;
 	sourceFileExists: boolean;
 	sourceFileIsCurrent: boolean;
@@ -906,7 +1212,8 @@ interface FlashFL {
 	xmlui: FlashXMLUI;
 }
 
-declare var fl:FlashFL;
-declare function alert();
-declare function confirm();
-declare function prompt();
+declare var fl: FlashFL;
+declare var FLfile: FlashFLfile;
+declare function alert(alertText: string): void;
+declare function confirm(strAlert: string): boolean;
+declare function prompt(promptMsg: string, text?: string): string;
