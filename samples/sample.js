@@ -15,8 +15,10 @@ for (var n = 0; n < timeline.frameCount; n++) {
                 element.x = 0;
                 element.y = 0;
                 library.editItem(element.libraryItem.name);
-                doc.selectAll();
-                doc.moveSelectionBy({ x: oldPos.x, y: oldPos.y });
+                unlockAllLayersTemporarily(element.libraryItem.timeline, function () {
+                    doc.selectAll();
+                    doc.moveSelectionBy({ x: oldPos.x, y: oldPos.y });
+                });
             }
         });
     });

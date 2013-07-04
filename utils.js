@@ -35,3 +35,19 @@ function dump(element) {
         fl.trace(k + ':' + element[k]);
     }
 }
+
+function unlockAllLayersTemporarily(timeline, callback) {
+    var lockeds = timeline.layers.map(function (layer) {
+        return layer.locked;
+    });
+    timeline.layers.forEach(function (layer, index) {
+        return layer.locked = false;
+    });
+    try  {
+        callback();
+    } finally {
+        timeline.layers.forEach(function (layer, index) {
+            return layer.locked = lockeds[index];
+        });
+    }
+}

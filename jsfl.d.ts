@@ -20,18 +20,23 @@ interface FlashMatrix {
 }
 
 interface FlashDocument {
-	addDataToDocument(); // Stores specified data with a document.
-	addDataToSelection(); // Stores specified data with the selected object(s).
-	addFilter(); // Applies a filter to the selected objects.
-	addItem(); // Adds an item from any open document or library
-	addNewLine(startPoint: FlashPoint, endpoint:FlashPoint):void; // Adds a new path between two points.
-	addNewOval(); // Adds a new Oval object in the specified
-	addNewRectangle(); // Adds a new rectangle or rounded rectangle,
-	addNewScene(); // Adds a new scene (Timeline object) as the next
-	addNewText(); // Inserts a new empty text field.
-	align(); // Aligns the selection.
-	allowScreens(); // Use this method before using the
-	arrange(); // Arranges the selection on the Stage.
+	// "integer", "integerArray", "double", "doubleArray", "string", and "byteArray"
+	addDataToDocument(name: string, type: string, data: any): void; // Stores specified data with a document.
+	addDataToSelection(name: string, type: string, data: any): void; // Stores specified data with the selected object(s).
+	addFilter(filterName: string): void; // Applies a filter to the selected objects.
+	addItem(position: FlashPoint, item: FlashItem): boolean; // Adds an item from any open document or library
+	addNewLine(startPoint: FlashPoint, endpoint: FlashPoint):void; // Adds a new path between two points.
+	addNewOval(boundingRectangle: FlashRectangle, bSuppressFill?: boolean, bSuppressStroke?: boolean): void; // Adds a new Oval object in the specified
+	addNewPrimitiveOval(boundingRectangle: FlashRectangle, bSpupressFill?: boolean, bSuppressStroke?: boolean): void;
+	addNewRectangle(boundingRectangle: FlashRectangle, roundness: number, bSuppressFill?: boolean, bSuppressStroke?: boolean); // Adds a new rectangle or rounded rectangle,
+	addNewPrimitiveRectangle(boundingRectangle: FlashRectangle, roundness: number, bSuppressFill?: boolean, bSuppressStroke?: boolean); // Adds a new rectangle or rounded rectangle,
+	addNewPublishProfile(profileName?: string): void;
+	addNewScene(name: string): boolean; // Adds a new scene (Timeline object) as the next
+	addNewText(boundingRectangle: FlashRectangle, text?: string): void; // Inserts a new empty text field.
+	align(alignmode: string, bUseDocumentBounds?: boolean); // Aligns the selection.
+	allowScreens(): void; // Use this method before using the
+	/** Arranges the selection on the Stage. "back", "backward", "forward", and "front" */
+	arrange(arrangeMode: string): void;
 	breakApart(); // Performs a break-apart operation on the current
 	canEditSymbol(); // Indicates whether the Edit Symbols menu and
 	canRevert(); // Determines whether you can use the
@@ -137,71 +142,114 @@ interface FlashDocument {
 	setStrokeColor(); // Changes the stroke color of the selection to the
 	setStrokeSize(); // Changes the stroke size of the selection to the
 	setStrokeStyle(); // Changes the stroke style of the selection to the
-	setTextRectangle(); // Changes the bounding rectangle for the selected
-	setTextSelection(); // Sets the text selection of the currently selected
-	setTextString(); // Inserts a string of text.
-	setTransformationPoint(); // Moves the transformation point of the current
-	skewSelection(); // Skews the selection by a specified amount.
-	smoothSelection(); // Smooths the curve of each selected fill outline or
-	space(); // Spaces the objects in the selection evenly.
-	straightenSelection(); // Straightens the currently selected strokes;
-	swapElement(); // Swaps the current selection with the specified
-	swapStrokeAndFill(); // Swaps the Stroke and Fill colors.
-	synchronizeWithHeadVersion(); // Synchronizes the specified document with the
-	testMovie(); // Executes a Test Movie operation on the
-	testScene(); // Executes a Test Scene operation on the current
-	traceBitmap(); // Performs a trace bitmap on the current selection;
-	transformSelection(); // Performs a general transformation on the current
-	unGroup(); // Ungroups the current selection.
-	union(); // Combines all selected shapes into a drawing
-	unlockAllElements(); // Unlocks all locked elements on the currently
-	xmlPanel(); // Posts a XMLUI dialog box.
-	accName; // A string that is equivalent to the Name field in the
-	as3AutoDeclare; // A Boolean value that describes whether the
-	as3Dialect; // A string that describes the ActionScript 3.0
-	as3ExportFrame; // An integer that specifies in which frame to export
-	as3StrictMode; // A Boolean value that specifies whether the
-	as3WarningsMode; // A Boolean value that specifies whether the
-	asVersion; // An integer that specifies which version of
-	autoLabel; // A Boolean value that is equivalent to the Auto
-	backgroundColor; // A string, hexadecimal value, or integer that
-	currentPublishProfile; // A string that specifies the name of the active
+	
+	/** Changes the bounding rectangle for the selected */
+	setTextRectangle(boundingRectangle: FlashRectangle): boolean;
+	
+	/** Sets the text selection of the currently selected */
+	setTextSelection(startIndex: number, endIndex: number): boolean;
+	
+	/** Inserts a string of text. */
+	setTextString(text: string, startIndex?: number, endIndex?: number): boolean;
+	
+	/** Moves the transformation point of the current */
+	setTransformationPoint(transformationPoint: FlashPoint): void;
+	
+	/** Skews the selection by a specified amount. */
+	skewSelection(xSkew: number, ySkew: number, whichEdge?: string): void;
+	
+	/** Smooths the curve of each selected fill outline or */
+	smoothSelection(): void;
+	
+	/** Spaces the objects in the selection evenly. */
+	space(direction: string, bUseDocumentBounds?: boolean): void;
+	
+	/** Straightens the currently selected strokes; */
+	straightenSelection(): void;
+	
+	/** Swaps the current selection with the specified */
+	swapElement(name: string): void;
+	
+	/** Swaps the Stroke and Fill colors. */
+	swapStrokeAndFill(): void;
+	//synchronizeWithHeadVersion(); // Synchronizes the specified document with the
+
+	/** Executes a Test Movie operation on the */
+	testMovie(): void;
+	
+	/** Executes a Test Scene operation on the current */
+	testScene(): void;
+	
+	/** Performs a trace bitmap on the current selection; */
+	traceBitmap(threshold: number, minimumArea: number, curveFit: string, cornerThreshold: string): void;
+	transformSelection(a: number, b: number, c: number, d: number): void; // Performs a general transformation on the current
+	unGroup(): void; // Ungroups the current selection.
+	union(): void; // Combines all selected shapes into a drawing
+	unlockAllElements(): void; // Unlocks all locked elements on the currently
+	xmlPanel(fileURI: string): any; // Posts a XMLUI dialog box.
+	accName: string; // A string that is equivalent to the Name field in the
+	as3AutoDeclare: boolean; // A Boolean value that describes whether the
+	as3Dialect: string; // A string that describes the ActionScript 3.0
+	as3ExportFrame: number; // An integer that specifies in which frame to export
+	as3StrictMode: boolean; // A Boolean value that specifies whether the
+	as3WarningsMode: boolean; // A Boolean value that specifies whether the
+	asVersion: number; // An integer that specifies which version of
+	autoLabel: boolean; // A Boolean value that is equivalent to the Auto
+	backgroundColor: any; // A string, hexadecimal value, or integer that
+	currentPublishProfile: string; // A string that specifies the name of the active
 	currentTimeline: FlashTimeline; // An integer that specifies the index of the active
-	description; // A string that is equivalent to the Description field in
+	description: string; // A string that is equivalent to the Description field in
 	docClass; // Specifies the top-level ActionScript 3.0 class
-	forceSimple; // A Boolean value that specifies whether the children
+	forceSimple: boolean; // A Boolean value that specifies whether the children
     frameRate: number; // A float value that specifies the number of frames
-	height; // An integer that specifies the height of the
-	id; // A unique integer (assigned automatically) that
+	height: number; // An integer that specifies the height of the
+	id: number; // A unique integer (assigned automatically) that
 	library: FlashLibrary; // Read-only; the library object for a document.
-	livePreview; // A Boolean value that specifies if Live Preview is
-	name; // Read-only; a string that represents the name of a
-	path; // Read-only; a string that represents the path of the
-	publishProfiles; // Read-only; an array of the publish profile names for
-	screenOutline; // Read-only; the current ScreenOutline object for the
-	selection: any[]; // An array of the selected objects in the document.
-	silent; // A Boolean value that specifies whether the object
-	timelines: FlashTimeline[]; // Read-only; an array of Timeline objects (see
-	viewMatrix: FlashMatrix; // Read-only; a Matrix object.
-	width: number; // An integer that specifies the width of the document
-    zoomFactor: number; // Specifies the zoom percent of the Stage at author
+	livePreview: boolean; // A Boolean value that specifies if Live Preview is
+	name: number; // Read-only; a string that represents the name of a
+	path: number; // Read-only; a string that represents the path of the
+	publishProfiles: string[]; // Read-only; an array of the publish profile names for
+	
+	/** Read-only; the current ScreenOutline object for the */
+	// Not available in CS5
+	//screenOutline: FlashScreenOutline;
+
+	/** An array of the selected objects in the document. */
+	selection: any[];
+	
+	/** A Boolean value that specifies whether the object */
+	silent: boolean;
+	
+	/** Read-only; an array of Timeline objects (see */
+	timelines: FlashTimeline[];
+	
+	/** Read-only; a Matrix object. */
+	viewMatrix: FlashMatrix;
+	
+	/** An integer that specifies the width of the document */
+	width: number;
+	
+	/** Specifies the zoom percent of the Stage at author */
+	zoomFactor: number;
 }
 
 interface FlashFLfile {
-	copy(fileURI:string, copyURI:string);
-	createFolder(folderURI:string);
-	exists(fileURI:string);
-	getAttributes(fileOrFolderURI:string);
-	getCreationDate(fileOrFolderURI:string);
-	getCreationDateObj(fileOrFolderURI:string);
-	getModificationDate();
-	getModificationDateObj();
-	getSize();
-	listFolder();
-	read();
-	remove();
-	setAttributes();
-	write();
+	copy(fileURI:string, copyURI:string): boolean;
+	createFolder(folderURI:string): boolean;
+	exists(fileURI:string): boolean;
+	getAttributes(fileOrFolderURI:string): string;
+	getCreationDate(fileOrFolderURI:string): string;
+	getCreationDateObj(fileOrFolderURI:string): Date;
+	getModificationDate(fileOrFolderURI:string): string;
+	getModificationDateObj(fileOrFolderURI: string): Date;
+	getSize(fileURI: string): number;
+	listFolder(folderURI: string, filesOrDirectories?: boolean): string[];
+	platformPathToURI(fileName: string): string;
+	read(fileOrFolderURI: string): string;
+	remove(fileOrFolderURI: string): boolean;
+	setAttributes(fileURI: string, strAttrs: string): boolean;
+	uriToPlatformPath(fileURI: string): string;
+	write(fileURI: string, textToWrite: string, strAppendMode?: string): boolean;
 }
 
 interface FlashSoundItem {
@@ -289,21 +337,83 @@ interface FlashSymbolItem {
 	timeline: FlashTimeline;
 }
 
-interface FlashItem extends FlashSymbolItem {
-	addData();
-	getData();
-	hasData();
-	removeData();
-	itemType;
-	linkageBaseClass;
-	linkageClassName;
-	linkageExportForAS;
-	linkageExportForRS;
-	linkageExportInFirstFrame;
-	linkageIdentifier;
-	linkageImportForRS;
-	linkageURL;
-	name;
+interface FlashFolderItem {
+}
+
+interface FlashFontItem {
+	// Specifies whether the Font item is bitmapped.
+	bitmap;
+	// Specifies whether the Font item is bold.
+	bold;
+	// Specifies characters to embed.
+	embeddedCharacters;
+	// Specifies items that can be selected in the Font Embedding dialog.
+	embedRanges;
+	// Specifies whether variant glyphs should be output in the font when publishing a SWF file.
+	embedVariantGlyphs;
+	// The name of the device font associated with the Font item.
+	font;
+	// Specifies the format of the font that is output when publishing a SWF filem.
+	isDefineFont4Symbol;
+	// Specifies whether the Font item is italic.
+	italic;
+	// The size of the Font item, in points.
+	size;
+}
+
+interface FlashSoundItem {
+	exportToFile();
+	bitRate: string;
+	bits: string;
+	compressionType: string;
+	convertStereoToMono: boolean;
+	fileLastModifiedDate: string;
+	originalCompressionType: string;
+	quality: string;
+	sampleRate: string;
+	sourceFileExists: boolean;
+}
+
+interface FlashVideoItem {
+	exportToFLV();
+	fileLastModifiedDate: string;
+	sourceFileExists: boolean;
+	sourceFileIsCurrent: boolean;
+	sourceFilePath: string;
+	videoType: string;
+}
+
+interface FlashBitmapItem {
+	exportToFile(fileURI: string): boolean;
+	allowSmoothing: boolean;
+	compressionType: string;
+	fileLastModifiedDate: string;
+	originalCompressionType: string;
+	sourceFileExists: boolean;
+	sourceFileIsCurrent: boolean;
+	sourceFilePath: string;
+	useDeblocking: boolean;
+	useImportedJPEGQuality: boolean;
+}
+
+interface FlashItem extends FlashSymbolItem, FlashFolderItem, FlashFontItem, FlashSoundItem, FlashVideoItem, FlashBitmapItem, FlashBitmapItem {
+	addData(name: string, type: string, data: any): void;
+	getData(name: string): any;
+	hasData(name: string): boolean;
+	removeData(name: string): void;
+	
+	/** Read-only; a string that specifies the type of element.  "undefined", "component", "movie clip", "graphic", "button", "folder", "font", "sound", "bitmap", "compiled clip", "screen", or "video" */
+	itemType: string;
+	linkageBaseClass: string;
+	linkageClassName: string;
+	linkageExportForAS: boolean;
+	linkageExportForRS: boolean;
+	linkageExportInFirstFrame: boolean;
+	linkageIdentifier: string;
+	linkageImportForRS: boolean;
+	linkageURL: string;
+	/** A string that specifies the name of the library item, which includes the folder structure. */
+	name: string;
 }
 
 interface FlashLayer {
@@ -320,54 +430,222 @@ interface FlashLayer {
 }
 
 interface FlashLibrary {
-	addItemToDocument();
-	addNewItem();
-	deleteItem();
-	duplicateItem();
+	addItemToDocument(position: FlashPoint, namePath?: string): boolean;
+	/** "video", "movie clip", "button", "graphic", "bitmap", "screen", and "folder" */
+	addNewItem(type: string, namePath?: string): boolean;
+	deleteItem(namePath?: string): boolean;
+	/** Method; makes a copy of the currently selected or specified item. The new item has a default name (such as item copy) and is set as the currently selected item. If more than one item is selected, the command fails. */
+	duplicateItem(namePath: string): boolean;
 	editItem(namePath?: string): boolean;
-	expandFolder();
-	findItemIndex();
-	getItemProperty();
-	getItemType();
-	getSelectedItems();
-	importEmbeddedSWF();
-	itemExists();
-	moveToFolder();
-	newFolder();
-	renameItem();
-	selectAll();
-	selectItem();
-	selectNone();
-	setItemProperty();
-	updateItem();
+	expandFolder(bExpand: boolean, bRecurseNestedParents?: boolean, namePath?: string): boolean;
+	findItemIndex(namePath: string): number;
+	getItemProperty(property: string): string;
+	getItemType(namePath?: string): string;
+	
+	/** An array of values for all currently selected items in the library. */
+	getSelectedItems(): FlashItem[];
+
+	importEmbeddedSWF(linkageName: string, swfData: any[], libName?: string): void;
+
+	itemExists(namePath: string): boolean;
+
+	moveToFolder(folderPath: string, itemToMove?: string, bReplace?: boolean): boolean;
+
+	/** Method; creates a new folder with the specified name, or a default name ("untitled folder #" ) if no folderName parameter is provided, in the currently selected folder. */
+	newFolder(folderPath?: string): boolean;
+
+	/** Method; renames the currently selected library item in the Library panel. */
+	renameItem(name: string): boolean;
+
+	/** Method; selects or deselects all items in the library. */
+	selectAll(bSelectAll?: boolean): void;
+
+	/** Method; selects a specified library item. */
+	selectItem(namePath: string, bReplaceCurrentSelection?: boolean, bSelect?: boolean): boolean;
+
+	/** Method; deselects all the library items. */
+	selectNone(): void;
+
+	/** Method; sets the property for all selected library items (ignoring folders). */
+	setItemProperty(property: string, value: any): void;
+
+	/** Method; updates the specified item. */
+	updateItem(namePath: string): boolean;
+
+	/** Property; an array of item objects in the library. */
 	items: FlashItem[];
 }
 
 interface FlashMath {
-	concatMatrix();
-	invertMatrix();
-	pointDistance();
+	/** Method; performs a matrix concatenation and returns the result. */
+	concatMatrix(mat1: FlashMatrix, mat2: FlashMatrix): FlashMatrix;
+
+	/** A Matrix object that is the inverse of the original matrix. */
+	invertMatrix(mat: FlashMatrix): FlashMatrix;
+
+	/** A floating-point value that represents the distance between the points. */
+	pointDistance(pt1: FlashPoint, pt2: FlashPoint): number;
 }
 
 interface FlashOutputPannel {
-	clear():void;
-	save();
+	/** Method; clears the contents of the Output panel. You can use this method in a batch processing application to clear a list of errors, or to save them incrementally by using this method withoutputPanel.save(). */
+	clear(): void;
+
+	save(fileURI: string, bAppendToFile?: boolean, bUseSystemEncoding?: boolean): void;
+
 	trace(message:string):void;
 }
 
+/**
+ * The HalfEdge object is the directed side of the edge of a Shape object.
+ * An edge has two half edges. You can transverse the contours of a shape by "walking around"
+ * these half edges. For example, starting from a half edge, you can trace all the half edges
+ * around a contour of a shape, and return to the original half edge.  Half edges are ordered.
+ * One half edge represents one side of the edge; the other half edge represents the other side.
+ */
 interface FlashHalfEdge {
-	getEdge();
-	getNext();
-	getOppositeHalfEdge();
-	getPrev();
-	getVertex();
+	getEdge(): FlashEdge;
+	getNext(): FlashHalfEdge;
+	getOppositeHalfEdge(): FlashHalfEdge;
+	getPrev(): FlashHalfEdge;
+	getVertex(): FlashVertex;
+	id: number;
+	index: number;
 }
 
+/** The Oval object is a shape that is drawn using the Oval Primitive tool. To determine if an item is an Oval object, use shape.isOvalObject. */
 interface FlashOval {
-	closePath();
-	endAngle();
-	innerRadius();
-	startAngle();
+	/** Read-only property; a Boolean value that specifies whether the Close Path check box in the Property inspector is selected. If the start angle and end angle values for the object are the same, setting this property has no effect until the values change. To set this value, use document.setOvalObjectProperty(). */
+	closePath: boolean;
+	/** Read-only property; a float value that specifies the end angle of the Oval object. Acceptable values are from 0 to 360. */
+	endAngle: number;
+	/** Read-only property; a float value that specifies the inner radius of the Oval object as a percentage. Acceptable values are from 0 to 99. */
+	innerRadius: number;
+	/** Read-only property; a float value that specifies the start angle of the Oval object. Acceptable values are from 0 to 360. To set this value, use document.setOvalObjectProperty(). */
+	startAngle: number;
+}
+
+/**
+ * This object contains all the properties of the Fill color setting of the Tools panel or of a selected shape. To retrieve a Fill object, use document.getCustomFill().
+ */
+interface FlashFill {
+	bitmapIsClipped: boolean;
+	bitmapPath: string;
+	/** Property; the color of the fill, in one of the following formats:
+	 * - A string in the format "#RRGGBB" or "#RRGGBBAA"
+	 * - A hexadecimal number in the format 0xRRGGBB
+	 * - An integer that represents the decimal equivalent of a hexadecimal number
+	 */
+	color: any;
+	/** Property; an array of colors in the gradient, expressed as integers. This property is available only if the value of the fill.style property is either "radialGradient" or "linearGradient". See fill.style */
+	colorArray: any[];
+	focalPoint: number;
+	linearRGB: boolean;
+	matrix: FlashMatrix;
+	overflow: string;
+	posArray: number[];
+	style: string;
+}
+
+interface FlashContour {
+	getHalfEdge(): FlashHalfEdge;
+	fill: FlashFill;
+	interior: boolean;
+	orientation: number;
+}
+
+interface FlashStroke {
+	/// A Boolean value, same as the Sharp Corners setting in the custom Stroke Style dialog box.
+	breakAtCorners: boolean;
+	/// A string that specifies the type of cap for the stroke.
+	capType: string;
+	/// A string, hexadecimal value, or integer that represents the stroke color.
+	color: any;
+	/// A string that specifies the type of hatching for the stroke.
+	curve: string;
+	/// An integer that specifies the lengths of the solid part of a dashed line.
+	dash1: number;
+	/// An integer that specifies the lengths of the blank part of a dashed line.
+	dash2: number;
+	/// A string that specifies the density of a stippled line.
+	density: string;
+	/// A string that specifies the dot size of a stippled line.
+	dotSize: string;
+	/// An integer that specifies the spacing between dots in a dotted line.
+	dotSpace: number;
+	/// A string that specifies the thickness of a hatch line.
+	hatchThickness: string;
+	/// A string that specifies the jiggle property of a hatched line.
+	jiggle: string;
+	/// A string that specifies the type of join for the stroke.
+	joinType: string;
+	/// A string that specifies the length of a hatch line.
+	length: string;
+	/// A float value that specifies the angle above which the tip of the miter will be truncated by a segment.
+	miterLimit: number;
+	/// A string that specifies the pattern of a ragged line.
+	pattern: string;
+	/// A string that specifies the rotation of a hatch line.
+	rotate: string;
+	/// A string that specifies the type of scale to be applied to the stroke.
+	scaleType: string;
+	/// A Fill object that represents the fill settings of the stroke.
+	shapeFill: FlashFill;
+	/// A string that specifies the spacing of a hatched line.
+	space: string;
+	/// A Boolean value that specifies whether stroke hinting is set on the stroke.
+	strokeHinting: boolean;
+	/// A string that describes the stroke style.
+	style: string;
+	/// An integer that specifies the stroke size.
+	thickness: number;
+	/// A string that specifies the variation of a stippled line.
+	variation: string;
+	/// A string that specifies the wave height of a ragged line.
+	waveHeight: string;
+	/// A string that specifies the wave length of a ragged line.
+	waveLength: string;
+}
+
+interface FlashEdge {
+	getControl(i: number): FlashPoint;
+	getHalfEdge(index: number): FlashHalfEdge;
+	setControl(index: number, x:number, y:number): void;
+	splitEdge(t: number): void;
+	cubicSegmentIndex: number;
+	id: number;
+	isLine: boolean;
+	stroke: FlashStroke;
+}
+
+interface FlashVertex {
+	getHalfEdge(): FlashHalfEdge;
+	setLocation(x: number, y: number);
+	x: number;
+	y: number;
+}
+
+/**
+ * The Shape object is a subclass of the Element object. The Shape object provides more precise control
+ * than the drawing APIs when manipulating or creating geometry on the Stage. This control is necessary
+ * so that scripts can create useful effects and other drawing commands (seeElement object).
+ * All Shape methods and properties that change a shape or any of its subordinate parts must be placed between
+ * shape.beginEdit() and shape.endEdit() calls to function correctly.
+ */
+interface FlashShape extends FlashOval {
+	getCubicSegmentPoints(cubicSegmentIndex:number): number;
+	beginEdit():void;
+	deleteEdge(index:number):void;
+	endEdit():void;
+	contours: FlashContour[];
+	edges: FlashEdge[];
+	isDrawingObject: boolean;
+	isGroup: boolean;
+	isOvalObject: boolean;
+	isRectangleObject: boolean;
+	members: FlashShape[];
+	numCubicSegments: number;
+	vertices: FlashVertex[];
 }
 
 interface FlashTimeline {
@@ -379,27 +657,80 @@ interface FlashTimeline {
 	name: string; // A string that represents the name of the current
 }
 
+interface FlashPath {
+	/// Appends a cubic Bézier curve segment to the path.
+	addCubicCurve(xAnchor: number, yAnchor: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number): void;
+	/// Appends a quadratic Bézier segment to the path.
+	addCurve(xAnchor: number, yAnchor: number, x2: number, y2: number, x3: number, y3: number): void;
+	/// Adds a point to the path.
+	addPoint(x: number, y: number): void;
+	/// Removes all points from the path.
+	clear(): void;
+	/// Appends a point at the location of the first point of the path and extends the path to that point, which closes the path.
+	close(); void;
+	/// Creates a shape on the Stage by using the current stroke and fill settings.
+	makeShape(bSupressFill?: boolean, bSupressStroke?: boolean): void;
+	/// Starts a new contour in the path.
+	newContour(): void;
+	/// Read-only; an integer representing the number of points in the path.
+	nPts: number;
+}
+
+interface FlashDrawingLayer {
+	/// Puts Flash in drawing mode.
+	beginDraw(persistentDraw?: boolean): void;
+	/// Erases what was previously drawn using the drawingLayer and prepares for more drawing commands.
+	beginFrame(): void;
+	/// Draws a cubic curve from the current pen location using the parameters as the coordinates of the cubic segment.
+	cubicCurveTo(x1Ctrl: number, y1Ctrl: number, x2Ctl: number, y2Ctl: number, xEnd: number, yEnd: number): void;
+	/// Draws a quadratic curve segment starting at the current drawing position and ending at a specified point.
+	curveTo(xCtl: number, yCtl: number, xEnd: number, yEnd: number): void;
+	/// Draws the specified path.
+	drawPath(path: FlashPath): void;
+	/// Exits drawing mode.
+	endDraw(): void;
+	/// Signals the end of a group of drawing commands.
+	endFrame(): void;
+	/// Draws a line from the current drawing position to the point (x,y).
+	lineTo(x: number, y: number): void;
+	/// Sets the current drawing position.
+	moveTo(x: number, y: number): void;
+	/// Returns a new Path object.
+	newPath(): void;
+	/// Sets the color of subsequently drawn data.
+	setColor(color: any): void;
+	/// This method is not available.
+	setFill(): void;
+	/// This method is not available.
+	setStroke(): void;
+}
+
 interface FlashFL {
-	addEventListener();
-	browseForFileURL();
-	clipCopyString();
-	closeAll();
-	closeAllPlayerDocuments();
-	closeDocument();
+	addEventListener(eventType, callbackFunction);
+	browseForFileURL(browseType, title?, previewArea?);
+	browseForFolderURL(description: string);
+	clearPublishCache(): void;
+	clipCopyString(string: string): void;
+	closeAll(bPromptToSave?: boolean): void;
+	closeAllPlayerDocuments(): boolean;
+	closeDocument(documentObject: FlashDocument, bPromptToSaveChanges?: boolean);
 	closeProject();
-    createDocument(document?: string): FlashDocument;
-    createDocument(document?: "timeline"): FlashDocument;
-    createDocument(document?: "presentation"): FlashDocument;
-    createDocument(document?: "application"): FlashDocument;
-	createProject();
-	downloadLatestVersion();
-	enableImmediateUpdates();
-	fileExists();
-	findDocumentDOM();
-	findDocumentIndex();
-	findObjectInDocByName();
-	findObjectInDocByType();
-	getAppMemoryInfo();
+	/** A string that specifies the type of document to create. Acceptable values are "timeline", "presentation", and "application". The default value is "timeline", which has the same effect as choosing File > New > Flash File (ActionScript 3.0). This parameter is optional. */
+	createDocument(document?: string): FlashDocument;
+
+	exportPublishProfileString(ucfURI: string, profileName: string): string;
+
+	//createProject();
+	//downloadLatestVersion(); // Not in CS5
+	//enableImmediateUpdates();
+
+	fileExists(fileURI: string): boolean;
+	findDocumentDOM(id: number): FlashDocument;
+	findDocumentIndex(name: string): number[];
+	findObjectInDocByName(instanceName: string, document: FlashDocument): { keyframe: FlashFrame; layer: FlashLayer; timeline: FlashTimeline; parent; }[];
+	/** elementType = "shape", "text", "instance", or "shapeObj". */
+	findObjectInDocByType(elementType: string, document: FlashDocument): any[];
+	getAppMemoryInfo(memType: number);
     
     /*
      * Method; retrieves the DOM (Document object) of the currently active document (FLA file).
@@ -444,9 +775,9 @@ interface FlashFL {
 	createNewDocListType;
 	createNewTemplateList;
     documents: FlashDocument[];
-	drawingLayer;
+	drawingLayer: FlashDrawingLayer;
 	effects;
-	Math;
+	Math: FlashMath;
 	mruRecentFileList;
 	mruRecentFileListType;
 	packagePaths;

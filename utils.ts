@@ -31,3 +31,13 @@ function dump(element: any) {
 		fl.trace(k + ':' + element[k]);
 	}
 }
+
+function unlockAllLayersTemporarily(timeline: FlashTimeline, callback: () => void ) {
+	var lockeds = timeline.layers.map(layer => layer.locked);
+	timeline.layers.forEach((layer, index) => layer.locked = false);
+	try {
+		callback();
+	} finally {
+		timeline.layers.forEach((layer, index) => layer.locked = lockeds[index]);
+	}
+}
