@@ -1,9 +1,16 @@
-interface Point {
+interface FlashPoint {
 	x: number;
 	y: number;
 }
 
-interface Matrix {
+interface FlashRectangle {
+	top: number;
+	right: number;
+	bottom: number;
+	left: number;
+}
+
+interface FlashMatrix {
 	a: number;
 	b: number;
 	c: number;
@@ -17,7 +24,7 @@ interface FlashDocument {
 	addDataToSelection(); // Stores specified data with the selected object(s).
 	addFilter(); // Applies a filter to the selected objects.
 	addItem(); // Adds an item from any open document or library
-	addNewLine(startPoint:Point, endpoint:Point):void; // Adds a new path between two points.
+	addNewLine(startPoint: FlashPoint, endpoint:FlashPoint):void; // Adds a new path between two points.
 	addNewOval(); // Adds a new Oval object in the specified
 	addNewRectangle(); // Adds a new rectangle or rounded rectangle,
 	addNewScene(); // Adds a new scene (Timeline object) as the next
@@ -37,7 +44,7 @@ interface FlashDocument {
 	clipPaste(); // Pastes the contents of the Clipboard into the
 	close(); // Closes the specified document.
 	convertLinesToFills(); // Converts lines to fills on the selected objects.
-	convertToSymbol(); // Converts the selected Stage item(s) to a new
+	convertToSymbol(type: string, name: string, registrationPoint: string); // Converts the selected Stage item(s) to a new
 	crop(); // Uses the top selected drawing object to crop all
 	deleteEnvelope(); // Deletes the envelope (bounding box that
 	deletePublishProfile(); // Deletes the currently active profile, if there is
@@ -52,7 +59,7 @@ interface FlashDocument {
 	duplicatePublishProfile(); // Duplicates the currently active profile and gives
 	duplicateScene(); // Makes a copy of the currently selected scene,
 	duplicateSelection(); // Duplicates the selection on the Stage.
-	editScene(); // Makes the specified scene the currently selected
+	editScene(index: number): void; // Makes the specified scene the currently selected
 	enableAllFilters(); // Enables all the filters on the Filters list for the
 	enableFilter(); // Enables the specified filter for the selected
 	enterEditMode(); // Switches the authoring tool into the editing mode
@@ -71,9 +78,9 @@ interface FlashDocument {
 	getMetadata(); // Returns a string containing the XML metadata
 	getMobileSettings(); // Returns the string passed to
 	getPlayerVersion(); // Returns a string that represents the targeted
-	getSelectionRect(); // Gets the bounding rectangle of the current
+	getSelectionRect(): FlashRectangle; // Gets the bounding rectangle of the current
 	getTextString(); // Gets the currently selected text.
-	getTimeline(): Timeline; // Retrieves the current Timeline object in the
+	getTimeline(): FlashTimeline; // Retrieves the current Timeline object in the
 	getTransformationPoint(); // Gets the location of the transformation point of
 	group(); // Converts the current selection to a group.
 	importFile(); // Imports a file into the document.
@@ -84,7 +91,7 @@ interface FlashDocument {
 	mouseClick(); // Performs a mouse click from the Selection tool.
 	mouseDblClk(); // Performs a double mouse click from the
 	moveSelectedBezierPointsBy(); // If the selection contains at least one path with at
-    moveSelectionBy(distanceToMove:Point); // Moves selected objects by a specified distance.
+	moveSelectionBy(distanceToMove: FlashPoint); // Moves selected objects by a specified distance.
 	optimizeCurves(); // Optimizes smoothing for the current selection,
 	publish(); // Publishes the document according to the active
 	punch(); // Uses top selected drawing object to punch
@@ -159,14 +166,14 @@ interface FlashDocument {
 	autoLabel; // A Boolean value that is equivalent to the Auto
 	backgroundColor; // A string, hexadecimal value, or integer that
 	currentPublishProfile; // A string that specifies the name of the active
-	currentTimeline: Timeline; // An integer that specifies the index of the active
+	currentTimeline: FlashTimeline; // An integer that specifies the index of the active
 	description; // A string that is equivalent to the Description field in
 	docClass; // Specifies the top-level ActionScript 3.0 class
 	forceSimple; // A Boolean value that specifies whether the children
     frameRate: number; // A float value that specifies the number of frames
 	height; // An integer that specifies the height of the
 	id; // A unique integer (assigned automatically) that
-	library; // Read-only; the library object for a document.
+	library: FlashLibrary; // Read-only; the library object for a document.
 	livePreview; // A Boolean value that specifies if Live Preview is
 	name; // Read-only; a string that represents the name of a
 	path; // Read-only; a string that represents the path of the
@@ -174,13 +181,13 @@ interface FlashDocument {
 	screenOutline; // Read-only; the current ScreenOutline object for the
 	selection: any[]; // An array of the selected objects in the document.
 	silent; // A Boolean value that specifies whether the object
-	timelines: Timeline[]; // Read-only; an array of Timeline objects (see
-	viewMatrix: Matrix; // Read-only; a Matrix object.
+	timelines: FlashTimeline[]; // Read-only; an array of Timeline objects (see
+	viewMatrix: FlashMatrix; // Read-only; a Matrix object.
 	width: number; // An integer that specifies the width of the document
     zoomFactor: number; // Specifies the zoom percent of the Stage at author
 }
 
-interface FLfile {
+interface FlashFLfile {
 	copy(fileURI:string, copyURI:string);
 	createFolder(folderURI:string);
 	exists(fileURI:string);
@@ -197,15 +204,56 @@ interface FLfile {
 	write();
 }
 
-interface SoundItem {
+interface FlashSoundItem {
 }
 
-interface Frame {
+// if FlashElement.elementType == 'instance'
+interface FlashInstance {
+	instanceType?: string;
+	libraryItem?: FlashItem;
+}
+
+interface FlashElement extends FlashInstance {
+	getPersistentData(name: string): any;
+	getTransformationPoint(): FlashPoint;
+	hasPersistentData(name:string): boolean;
+	removePersistentData(name:string): void;
+	setPersistentData(name:string, type:string, value: any):void;
+	setTransformationPoint(transformationPoint: FlashPoint): void;
+	depth: number;
+
+	/**
+	 * Read-only property; a string that represents the type of the specified element.
+	 * The value is one of the following: "shape", "text", "instance", or "shapeObj".
+	 * A "shapeObj" is created with an extensible tool.
+	 */
+	elementType: string;
+	height: number;
+	layer: FlashLayer;
+	left: number;
+	locked: boolean;
+	matrix: FlashMatrix;
+	name: string;
+	rotation: number;
+	scaleX: number;
+	scaleY: number;
+	selected: boolean;
+	skewX: number;
+	skewY: number;
+	top: number;
+	transformX: number;
+	transformY: number;
+	width: number;
+	x: number;
+	y: number;
+}
+
+interface FlashFrame {
 	getCustomEase();
 	setCustomEase();
 	actionScript;
 	duration;
-	elements;
+	elements: FlashElement[];
 	hasCustomEase;
 	labelType;
 	motionTweenOrientToPath;
@@ -217,7 +265,7 @@ interface Frame {
 	name;
 	shapeTweenBlend;
 	soundEffect;
-	soundLibraryItem:SoundItem;
+	soundLibraryItem:FlashSoundItem;
 	soundLoop;
 	soundLoopMode;
 	soundName;
@@ -228,7 +276,20 @@ interface Frame {
 	useSingleEaseCurve;
 }
 
-interface Item {
+interface FlashSymbolItem {
+	convertToCompiledClip(): void;
+	exportSWC(outputURI: string): void;
+	exportSWF(outputURI: string): void;
+	scalingGrid: boolean;
+	scalingGridRect: FlashRectangle;
+	sourceAutoUpdate: boolean;
+	sourceFilePath: string;
+	sourceLibraryName: string;
+	symbolType: string;
+	timeline: FlashTimeline;
+}
+
+interface FlashItem extends FlashSymbolItem {
 	addData();
 	getData();
 	hasData();
@@ -245,25 +306,25 @@ interface Item {
 	name;
 }
 
-interface Layer {
+interface FlashLayer {
 	color: any;
 	frameCount: number;
-	frames: Frame[];
+	frames: FlashFrame[];
 	height: number;
 	layerType: string;
 	locked: boolean;
 	name: string;
 	outline: boolean;
-	parentLayer: Layer;
+	parentLayer: FlashLayer;
 	visible:boolean;
 }
 
-interface Library {
+interface FlashLibrary {
 	addItemToDocument();
 	addNewItem();
 	deleteItem();
 	duplicateItem();
-	editItem();
+	editItem(namePath?: string): boolean;
 	expandFolder();
 	findItemIndex();
 	getItemProperty();
@@ -279,22 +340,22 @@ interface Library {
 	selectNone();
 	setItemProperty();
 	updateItem();
-	items: Item[];
+	items: FlashItem[];
 }
 
-interface Math {
+interface FlashMath {
 	concatMatrix();
 	invertMatrix();
 	pointDistance();
 }
 
-interface OutputPannel {
+interface FlashOutputPannel {
 	clear():void;
 	save();
 	trace(message:string):void;
 }
 
-interface HalfEdge {
+interface FlashHalfEdge {
 	getEdge();
 	getNext();
 	getOppositeHalfEdge();
@@ -302,28 +363,23 @@ interface HalfEdge {
 	getVertex();
 }
 
-interface Instance {
-	instanceType:string;
-	libraryItem;
-}
-
-interface Oval {
+interface FlashOval {
 	closePath();
 	endAngle();
 	innerRadius();
 	startAngle();
 }
 
-interface Timeline {
+interface FlashTimeline {
 	currentFrame: number; // A zero-based index for the frame at the current
 	currentLayer: number; // A zero-based index for the currently active layer.
 	frameCount: number; // Read-only; an integer that represents the number of
 	layerCount: number; // Read-only; an integer that represents the number of
-	layers: Layer[]; // Read-only; an array of layer objects.
+	layers: FlashLayer[]; // Read-only; an array of layer objects.
 	name: string; // A string that represents the name of the current
 }
 
-interface FL {
+interface FlashFL {
 	addEventListener();
 	browseForFileURL();
 	clipCopyString();
@@ -365,7 +421,7 @@ interface FL {
 	resetAS3PackagePaths();
 	resetPackagePaths();
 	revertDocumentToLastVersion();
-	runScript();
+	runScript(fileURI:string, funcName?: Function, args?: any[]): any;
 	saveAll();
 	saveVersionOfDocument();
 	saveDocument();
@@ -395,14 +451,14 @@ interface FL {
 	mruRecentFileListType;
 	packagePaths;
 	objectDrawingMode;
-	outputPanel;
-	scriptURI;
+	outputPanel: FlashOutputPannel;
+	scriptURI: string;
 	tools;
 	version;
 	xmlui;
 }
 
-declare var fl:FL;
+declare var fl:FlashFL;
 declare function alert();
 declare function confirm();
 declare function prompt();

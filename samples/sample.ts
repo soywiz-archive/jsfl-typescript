@@ -1,13 +1,29 @@
 ///<reference path="../jsfl.d.ts" />
+///<reference path="../utils.ts" />
+
+fl.runScript(fl.scriptURI.replace(/\/[^\/]+$/, '') + '/../utils.js');
+
+fl.outputPanel.clear();
 
 var doc = fl.getDocumentDOM();
-//doc.addNewLine({ x: 216.7, y: 122.3 }, { x: 366.8, y: 165.8 });
+var library = doc.library;
+var timeline = doc.getTimeline();
+for (var n = 0; n < timeline.frameCount; n++) {
+	timeline.currentFrame = n;
 
-//fl.trace(doc.timelines[0].layers[0].frames[0].name);
-doc.getTimeline().currentFrame = 0;
-doc.selectAll();
-doc.moveSelectionBy({ x: 100, y: 100 });
+	timeline.layers.forEach((layer) => {
+		layer.frames[n].elements.forEach((element) => {
+			if (element.elementType == "instance") {
+				var oldPos = { x: element.x, y: element.y }
+				element.x = 0;
+				element.y = 0;
+				library.editItem(element.libraryItem.name);
+				doc.selectAll();
+				doc.moveSelectionBy({ x: oldPos.x, y: oldPos.y });
+			}
+		});
+	});
 
-doc.getTimeline().currentFrame = 1;
-doc.selectAll();
-doc.moveSelectionBy({ x: 200, y: 200 });
+	doc.editScene(0);
+}
+timeline.currentFrame = 0;
