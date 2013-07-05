@@ -997,12 +997,150 @@ interface FlashVertex {
 
 
 interface FlashTimeline {
-	currentFrame: number; // A zero-based index for the frame at the current
-	currentLayer: number; // A zero-based index for the currently active layer.
-	frameCount: number; // Read-only; an integer that represents the number of
-	layerCount: number; // Read-only; an integer that represents the number of
-	layers: FlashLayer[]; // Read-only; an array of layer objects.
-	name: string; // A string that represents the name of the current
+    /** Adds a motion guide layer above the current layer and attaches the current layer to the newly added guide layer. */
+    addMotionGuide(): number;
+
+    /**  Adds a new layer to the document and makes it the current layer. */
+    addNewLayer(name?: string, layerType?: string, bAddAbove?: boolean);
+
+    /** Deletes all the contents from a frame or range of frames on the current layer. */
+    clearFrames(startFrameIndex?: number, endFrameIndex?: number): void;
+
+    /** Converts a keyframe to a regular frame and deletes its contents on the current layer. */
+    clearKeyframes(startFrameIndex?: number, endFrameIndex?: number): void;
+
+    /** Converts frames to blank keyframes on the current layer. */
+    convertToBlankKeyframes(startFrameIndex?: number, endFrameIndex?: number): void;
+        
+    /** Converts a range of frames to keyframes (or converts the selection if no frames are specified) on the current layer. */
+    convertToKeyframes(startFrameIndex?: number, endFrameIndex?: number): void;
+        
+    /** Copies a range of frames on the current layer to the clipboard. */
+    copyFrames(startFrameIndex?: number, endFrameIndex?: number): void;
+        
+    /** Copies a range of Timeline layers to the clipboard. */
+    copyLayers(startFrameIndex?: number, endFrameIndex?: number): void;
+        
+    /** Copies motion on selected frames, either from a motion tween or from frame - by - frame animation, so it can be applied to other frames. */
+    copyMotion(): void;
+    
+    /** Copies motion on selected frames, either from a motion tween or from frame - by - frame animation, to the clipboard as ActionScript 3.0 code. */
+    copyMotionAsAS3(): void;
+        
+    /** Creates a new motion object at a designated start and end frame. */
+    createMotionObject(startFrameIndex?: number, endFrameIndex?: number): void;
+    
+    /** Sets the frame.tweenType property to motion for each selected keyframe on the current layer, and converts each frame’s contents to a single symbol instance if necessary. */
+    createMotionTween(startFrameIndex?: number, endFrameIndex?: number): void;
+        
+    /** Cuts a range of frames on the current layer from the timeline and saves them to the clipboard. */
+    cutFrames(startFrameIndex?: number, endFrameIndex?: number): void;
+        
+    /** Cuts a range of Timeline layers and saves them to the clipboard. */
+    cutLayers(startLayerIndex?: number, endLayerIndex?: number): void;
+        
+    /** Deletes a layer. */
+    deleteLayer(index: number): void;
+        
+    /** Duplicates the selected layers or specified layers. */
+    duplicateLayers(startFrameIndex?: number, endFrameIndex?: number): void;
+        
+    /** Expands or collapses the specified folder or folders. */
+    expandFolder(bExpand: boolean, bRecurseNestedParents?: boolean, index?: number): void;
+        
+    /** Finds an array of indexes for the layers with the given name. */
+    findLayerIndex(name: string): number[];
+        
+    /** Retrieves the specified property’s value for the selected frames. */
+    getFrameProperty(property: string, startframeIndex?: number, endFrameIndex?: number): any;
+        
+    /** Returns an XML string that represents the current positions of the horizontal and vertical guide lines for a timeline(View > Guides > Show Guides). */
+    getGuidelines(): string;
+        
+    /** Retrieves the specified property’s value for the selected layers. */
+    getLayerProperty(property: string): any;
+        
+    /** Retrieves the currently selected frames in an array. */
+    getSelectedFrames(): FlashFrame[];
+    
+    /** Retrieves the zero - based index values of the currently selected layers. */
+    getSelectedLayers(): FlashLayer[];
+    
+    /** Inserts a blank keyframe at the specified frame index; if the index is not specified, inserts the blank keyframe by using the playhead / selection. */
+    insertBlankKeyframe(frameNumIndex?: number): void;
+        
+    /** Inserts the specified number of frames at the given frame number. */
+    insertFrames(numFrames?: number, bAllLayers?: boolean, frameNumIndex?: number): void;
+    
+    /** Inserts a keyframe at the specified frame. */
+    insertKeyframe(frameNumIndex?: number): void;
+        
+    /** Pastes the range of frames from the clipboard into the specified frames. */
+    pasteFrames(startFrameIndex?: number, endFrameIndex?: number): void;
+
+    /** Pastes copied layers to the Timeline above the specified layer index. */
+    pasteLayers(layerIndex: number): number;
+        
+    /** Pastes the range of motion frames retrieved by */
+    pasteMotion(): void;
+        
+    /** Deletes the frame. */
+    removeFrames(startFrameIndex?: number, endFrameIndex?: number): void;
+    
+    /** Removes the motion object created with timeline.createMotionObject(), and converts the frame(s) to static frames. */
+    removeMotionObject(startFrame: number, endFrame: number):void
+        
+    /** Moves the first specified layer before or after the second specified layer. */
+    reorderLayer(layerToMove: number, layerToPutItBy: number, bAddBefore?: boolean): void;
+        
+    /** Reverses a range of frames. */
+    reverseFrames(startFrameIndex?: number, endFrameIndex?: number): void
+    
+    /** Selects all the frames in the current timeline. */
+    selectAllFrames(): void;
+    
+    /** Sets the property of the Frame object for the selected frames. */
+    setFrameProperty(property: string, value: any, startFrameIndex?: number, endFrameIndex?: number): void;
+    
+    /** Replaces the guide lines for the timeline with the information specified. */
+    setGuidelines(xmlString: string): boolean;
+
+    /** Sets the specified property on all the selected layers to a specified value. */
+    setLayerProperty(property: string, value: any, layersToChange?: string): void;
+
+    /** Selects a range of frames in the current layer or sets the selected frames to the selection array passed into this method. */
+    setSelectedFrames(startFrameIndex: number, endFrameIndex: number, bReplaceCurrentSelection?: boolean): void;
+    setSelectedFrames(selectionList: number[], bReplaceCurrentSelection?: boolean): void;
+
+    /** Sets the layer to be selected; also makes the specified layer the current layer. */
+    setSelectedLayers(index: number, bReplaceCurrentSelection?: boolean): void;
+
+    /** Shows the layer masking during authoring by locking the mask and masked layers. */
+    showLayerMasking(layer: number): void;
+
+    /** Starts automatic playback of the timeline if it is not currently playing. */
+    startPlayback(): void;
+
+    /** Stops autoumatic playback of the timeline if it is currently playing. */
+    stopPlayback(): void;
+
+    /** A zero-based index for the frame at the current */
+	currentFrame: number;
+    
+    /** A zero-based index for the currently active layer. */
+    currentLayer: number;
+
+    /** Read-only; an integer that represents the number of */
+    frameCount: number;
+
+    /** Read-only; an integer that represents the number of */
+    layerCount: number;
+
+    /** Read-only; an array of layer objects. */
+	layers: FlashLayer[];
+    
+    /** A string that represents the name of the current */
+    name: string;
 }
 
 interface FlashPath {

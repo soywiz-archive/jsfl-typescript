@@ -2,27 +2,49 @@ fl.runScript(fl.scriptURI.replace(/\/[^\/]+$/, '') + '/../utils.js');
 
 fl.outputPanel.clear();
 
-var doc = fl.getDocumentDOM();
-var library = doc.library;
-var timeline = doc.getTimeline();
-for (var n = 0; n < timeline.frameCount; n++) {
-    timeline.currentFrame = n;
+function codeInsideType(timelineContext) {
+    var element1 = $document.selection[0];
+    var element1Pos = { x: element1.x, y: element1.y };
 
-    timeline.layers.forEach(function (layer) {
-        layer.frames[n].elements.forEach(function (element) {
-            if (element.elementType == "instance") {
-                var oldPos = { x: element.x, y: element.y };
-                element.x = 0;
-                element.y = 0;
-                library.editItem(element.libraryItem.name);
-                unlockAllLayersTemporarily(element.libraryItem.timeline, function () {
-                    doc.selectAll();
-                    doc.moveSelectionBy({ x: oldPos.x, y: oldPos.y });
+    $document.moveSelectionBy({ x: -element1Pos.x, y: -element1Pos.y });
+
+    timelineContext.edit(function (timelineContext) {
+        for (var n = 0; n < timelineContext.timeline.frameCount; n++) {
+            timelineContext.gotoFrame(n).select();
+            if ($document.selection.length > 0) {
+                $document.moveSelectionBy({ x: element1Pos.x, y: element1Pos.y });
+
+                var element2 = $document.selection[0];
+                var element2Pos = { x: element2.x, y: element2.y };
+
+                $document.moveSelectionBy({ x: -element2Pos.x, y: -element2Pos.y });
+
+                timelineContext.edit(function (timelineContext) {
+                    unlockAllLayersTemporarily(timelineContext.timeline, function () {
+                        $document.selectAll();
+                        if ($document.selection.length > 0) {
+                            $document.moveSelectionBy({ x: element2Pos.x, y: element2Pos.y });
+                        }
+                    });
                 });
             }
-        });
+        }
     });
-
-    doc.editScene(0);
 }
-timeline.currentFrame = 0;
+
+function code() {
+    $document.editScene(0);
+    var timelineContext = new TimelineContext($timeline);
+
+    for (var layerIndex = 0; layerIndex < timelineContext.timeline.layerCount; layerIndex++) {
+        if (!timelineContext.timeline.layers[layerIndex].locked) {
+            timelineContext.timeline.currentLayer = layerIndex;
+            timelineContext.gotoFrame(1);
+            timelineContext.timeline.setSelectedLayers(timelineContext.timeline.currentLayer);
+            timelineContext.timeline.setSelectedFrames(0, 0, true);
+            codeInsideType(timelineContext);
+        }
+    }
+}
+
+code();
